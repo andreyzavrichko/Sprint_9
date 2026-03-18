@@ -1,0 +1,79 @@
+name: Autotests — Foodgram
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Pull Chrome image for Selenoid
+        run: docker pull selenoid/chrome:128.0
+
+      - name: Start Selenoid
+        run: |
+          docker run -d \
+            --name selenoid \
+            -p 4444:4444 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v ${{ github.workspace }}/browsers.json:/etc/selenoid/browsers.json:ro \
+            aerokube/selenoid:latest-release \
+            -conf /etc/selenoid/browsers.json -limit 4
+
+      - name: Wait for Selenoid
+        run: |
+          for i in {1..10}; do
+            curl http://localhost:4444/status && break
+            sleep 2
+          done
+
+      - name: Print logs if failed
+        if: failure()
+        run: docker logs selenoid
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          pytest \
+            --selenoid-uri http://localhost:4444/wd/hub \
+            --headless \
+            -v \
+            --alluredir=allure-results
+
+      - name: Load Allure test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Generate Allure report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+
+      - name: Publish Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
