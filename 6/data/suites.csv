@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","2300","После входа кнопка «Выход» отображается в шапке","tests","Wed Mar 18 18:40:49 UTC 2026","passed","Wed Mar 18 18:40:52 UTC 2026","TestLogin","test_login","",""
+"","4058","После создания рецепта отображается его карточка","tests","Wed Mar 18 18:40:33 UTC 2026","passed","Wed Mar 18 18:40:37 UTC 2026","TestCreateRecipe","test_create_recipe","",""
+"","2600","После редиректа отображается форма авторизации","tests","Wed Mar 18 18:40:56 UTC 2026","passed","Wed Mar 18 18:40:59 UTC 2026","TestRegister","test_register","",""
+"","3510","Карточка содержит название, указанное при создании","tests","Wed Mar 18 18:40:41 UTC 2026","passed","Wed Mar 18 18:40:45 UTC 2026","TestCreateRecipe","test_create_recipe","",""
+"","2974","После входа происходит редирект на главную страницу","tests","Wed Mar 18 18:40:46 UTC 2026","passed","Wed Mar 18 18:40:49 UTC 2026","TestLogin","test_login","",""
+"","2551","После заполнения формы происходит редирект на /signin","tests","Wed Mar 18 18:40:53 UTC 2026","passed","Wed Mar 18 18:40:55 UTC 2026","TestRegister","test_register","",""
