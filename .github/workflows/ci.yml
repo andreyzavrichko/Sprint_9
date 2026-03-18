@@ -25,9 +25,19 @@ jobs:
             -p 4444:4444 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v ${{ github.workspace }}/browser.json:/etc/selenoid/browsers.json:ro \
-            aerokube/selenoid:latest \
+            aerokube/selenoid:latest-release \
             -conf /etc/selenoid/browsers.json -limit 4
-          sleep 5
+
+      - name: Wait for Selenoid
+        run: |
+          for i in {1..10}; do
+            curl http://localhost:4444/status && break
+            sleep 2
+          done
+
+      - name: Print logs if failed
+        if: failure()
+        run: docker logs selenoid
 
       - name: Set up Python
         uses: actions/setup-python@v5
