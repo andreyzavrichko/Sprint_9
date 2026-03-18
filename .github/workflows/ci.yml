@@ -24,7 +24,7 @@ jobs:
             --name selenoid \
             -p 4444:4444 \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            -v ${{ github.workspace }}/browser.json:/etc/selenoid/browsers.json:ro \
+            -v ${{ github.workspace }}/browsers.json:/etc/selenoid/browsers.json:ro \
             aerokube/selenoid:latest-release \
             -conf /etc/selenoid/browsers.json -limit 4
 
